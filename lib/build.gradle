@@ -12,9 +12,11 @@ plugins {
 
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
+
+	id 'maven-publish'
 }
 
-version "1.0.0"
+version "1.0.1"
 group "pl.xpu"
 
 repositories {
@@ -51,6 +53,44 @@ project(":lib") {
 		// Will include every single one of your dependencies, project or not
 		from {
 			configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+		}
+	}
+}
+
+def pomConfig = {
+	licenses {
+		license {
+			name "MIT License"
+			url "https://github.com/xpu-pl/html-validator/blob/master/LICENSE"
+			distribution "repo"
+		}
+	}
+	developers {
+		developer {
+			id "michalszulc"
+			name "Michal Szulc"
+			email "michal@xpu.pl"
+		}
+	}
+
+	scm {
+		url "https://github.com/xpu-pl/html-validator"
+	}
+}
+
+publishing {
+	publications {
+		library(MavenPublication) {
+			groupId getGroup()
+			artifactId 'html-validator'
+			version getVersion()
+
+			from components.java
+		}
+	}
+	repositories {
+		maven {
+			url = uri("${buildDir}/publishing-repository")
 		}
 	}
 }
