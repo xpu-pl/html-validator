@@ -15,7 +15,7 @@ import org.xml.sax.SAXException
 
 import java.nio.charset.StandardCharsets
 
-class HtmlValidator {
+class HtmlDocumentValidator {
 
 	static final String SCHEMA_URL = "http://s.validator.nu/html5-rdfalite.rnc"
 	SimpleDocumentValidator validator

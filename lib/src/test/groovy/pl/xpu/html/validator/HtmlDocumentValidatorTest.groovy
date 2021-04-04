@@ -6,12 +6,12 @@ package pl.xpu.html.validator
 import spock.lang.Specification
 import spock.lang.Unroll
 
-class HtmlValidatorTest extends Specification {
+class HtmlDocumentValidatorTest extends Specification {
 
 	@Unroll
 	void "validateHtml: check errors as string"() {
 		given:
-			HtmlValidator htmlValidator = new HtmlValidator()
+			HtmlDocumentValidator htmlValidator = new HtmlDocumentValidator()
 		expect:
 			htmlValidator.validateHtmlDocument(htmlContent) == expectedErrors
 
