@@ -3,6 +3,7 @@
  */
 package pl.xpu.html.validator
 
+import groovy.json.JsonSlurper
 import nu.validator.json.Serializer
 import nu.validator.messages.JsonMessageEmitter
 import nu.validator.messages.MessageEmitterAdapter
@@ -25,14 +26,24 @@ class HtmlDocumentValidator {
 
 	def validateHtmlDocument(String htmlContent) throws Exception {
 		try {
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(htmlContent.getBytes("UTF-8"))
-			return validateHtmlDocument(inputStream)
+			String errorsAsString = validateHtmlDocumentAsString(htmlContent)
+			JsonSlurper jsonSlurper = new JsonSlurper()
+			return errorsAsString ? jsonSlurper.parseText(errorsAsString) : null
 		} catch (UnsupportedEncodingException e) {
 			throw new Exception("Exception while validating!", e)
 		}
 	}
 
-	protected validateHtmlDocument(InputStream sourceStream) throws Exception {
+	String validateHtmlDocumentAsString(String htmlContent) throws Exception {
+		try {
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(htmlContent.getBytes("UTF-8"))
+			return validateHtmlDocumentAsString(inputStream)
+		} catch (UnsupportedEncodingException e) {
+			throw new Exception("Exception while validating!", e)
+		}
+	}
+
+	protected String validateHtmlDocumentAsString(InputStream sourceStream) throws Exception {
 		try {
 			setupAndValidate(sourceStream)
 			String result = out.toString(StandardCharsets.UTF_8.name())

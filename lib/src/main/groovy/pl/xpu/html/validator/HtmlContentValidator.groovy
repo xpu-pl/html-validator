@@ -3,7 +3,7 @@ package pl.xpu.html.validator
 import groovy.json.JsonSlurper
 
 class HtmlContentValidator {
-	def jsonSlurper = new JsonSlurper()
+	JsonSlurper jsonSlurper = new JsonSlurper()
 
 	boolean hasUnclosedTags(String content) {
 		def errors = validateHtmlContent(content)
@@ -19,7 +19,7 @@ class HtmlContentValidator {
 
 	def validateHtmlContent(String content) {
 		String htmlContent = isStartingWithDoctype(content) ? content : addFakeButValidHtmlStructureForRandomHtmlContent(content)
-		def errorsAsString = new HtmlDocumentValidator().validateHtmlDocument(htmlContent)
+		String errorsAsString = new HtmlDocumentValidator().validateHtmlDocumentAsString(htmlContent)
 		return errorsAsString ? jsonSlurper.parseText(errorsAsString) : null
 	}
 

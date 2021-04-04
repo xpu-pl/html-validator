@@ -9,15 +9,34 @@ import spock.lang.Unroll
 class HtmlDocumentValidatorTest extends Specification {
 
 	@Unroll
-	void "validateHtml: check errors as string"() {
+	void "validateHtmlDocumentAsString: check errors as string"() {
 		given:
 			HtmlDocumentValidator htmlValidator = new HtmlDocumentValidator()
 		expect:
-			htmlValidator.validateHtmlDocument(htmlContent) == expectedErrors
+			htmlValidator.validateHtmlDocumentAsString(htmlContent) == expectedErrors
 
 		where:
 			htmlContent                                                                               || expectedErrors
 			"test"                                                                                    || '{"messages":[{"type":"error","lastLine":1,"lastColumn":3,"firstColumn":1,"message":"Non-space characters found without seeing a doctype first. Expected “<!DOCTYPE html>”.","extract":"test","hiliteStart":0,"hiliteLength":3},{"type":"error","lastLine":1,"lastColumn":3,"firstColumn":1,"message":"Element “head” is missing a required instance of child element “title”.","extract":"test","hiliteStart":0,"hiliteLength":3}]}\n'
 			"<!DOCTYPE html><html lang='en'><head><title>t</title></head><body>content</body></html>" || '{"messages":[]}\n'
 	}
+
+	@Unroll
+	void "validateHtmlDocument: check errors as string"() {
+		given:
+			HtmlDocumentValidator htmlValidator = new HtmlDocumentValidator()
+
+		when:
+			def result = htmlValidator.validateHtmlDocument(htmlContent)
+		then:
+			result?.messages?.size() == numberOfErrors
+
+		where:
+			htmlContent                                                                                                                || numberOfErrors
+			"test"                                                                                                                     || 2
+			"<!DOCTYPE html><html lang='en'><head><title>t</title></head><body>content</body></html>"                                  || 0
+			"<!DOCTYPE html><html lang='en'><head><title>t</title></head><body><div>content inside unclosed div element</body></html>" || 2
+			"<!DOCTYPE html><html lang='en'><head></head><body>missing title</body></html>"                                            || 1
+	}
+
 }
