@@ -57,30 +57,30 @@ project(":lib") {
 	}
 }
 
-def pomConfig = {
-	licenses {
-		license {
-			name "MIT License"
-			url "https://github.com/xpu-pl/html-validator/blob/master/LICENSE"
-			distribution "repo"
-		}
-	}
-	developers {
-		developer {
-			id "michalszulc"
-			name "Michal Szulc"
-			email "michal@xpu.pl"
-		}
-	}
-
-	scm {
-		url "https://github.com/xpu-pl/html-validator"
-	}
-}
-
 publishing {
 	publications {
 		library(MavenPublication) {
+			pom {
+				name = 'JAVA/Groovy HTML validation library'
+				description = 'It helps to quickly validate specific HTML text payload and returns JSON with potential errors'
+				url = 'https://github.com/xpu-pl/html-validator'
+				licenses {
+					license {
+						name = 'MIT License'
+						url = 'https://github.com/xpu-pl/html-validator/blob/master/LICENSE'
+					}
+				}
+				developers {
+					developer {
+						id = 'michalszulc'
+						name = "Michal Szulc"
+						email = 'michal@xpu.pl'
+					}
+				}
+				scm {
+					url = 'https://github.com/xpu-pl/html-validator'
+				}
+			}
 			groupId getGroup()
 			artifactId 'html-validator'
 			version getVersion()
