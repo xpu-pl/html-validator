@@ -4,16 +4,20 @@
 package pl.xpu.html.validator
 
 import spock.lang.Specification
+import spock.lang.Unroll
 
-class LibraryTest extends Specification {
-	def "someLibraryMethod returns true"() {
-		setup:
-			def lib = new Library()
+class HtmlValidatorTest extends Specification {
 
-		when:
-			def result = lib.someLibraryMethod()
+	@Unroll
+	void "validateHtml: check errors as string"() {
+		given:
+			HtmlValidator htmlValidator = new HtmlValidator()
+		expect:
+			htmlValidator.validateHtmlDocument(htmlContent) == expectedErrors
 
-		then:
-			result == true
+		where:
+			htmlContent                                                                               || expectedErrors
+			"test"                                                                                    || '{"messages":[{"type":"error","lastLine":1,"lastColumn":3,"firstColumn":1,"message":"Non-space characters found without seeing a doctype first. Expected “<!DOCTYPE html>”.","extract":"test","hiliteStart":0,"hiliteLength":3},{"type":"error","lastLine":1,"lastColumn":3,"firstColumn":1,"message":"Element “head” is missing a required instance of child element “title”.","extract":"test","hiliteStart":0,"hiliteLength":3}]}\n'
+			"<!DOCTYPE html><html lang='en'><head><title>t</title></head><body>content</body></html>" || '{"messages":[]}\n'
 	}
 }
