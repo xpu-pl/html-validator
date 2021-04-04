@@ -4,6 +4,9 @@
 # Ignore Gradle build output directory
 build
 
+#Intellij
+.idea/
+html-validator.iml
 
 # Created by https://www.gitignore.io/api/java,gradle
 
